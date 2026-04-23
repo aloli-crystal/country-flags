@@ -1,0 +1,136 @@
+= crystal-flags
+:source-language: crystal
+:toc: left
+:toc-title: Table des matières
+:toclevels: 2
+
+image:https://github.com/aloli-crystal/crystal-flags/actions/workflows/ci.yml/badge.svg[CI,link=https://github.com/aloli-crystal/crystal-flags/actions/workflows/ci.yml]
+
+English version: link:README.adoc[README.adoc]
+
+Drapeaux de pays au format SVG, embarqués et accessibles via une API
+minimaliste pour Crystal. Le shard fournit environ 270 SVG issus de
+https://github.com/lipis/flag-icons[lipis/flag-icons] (MIT), inlinés à
+la compilation — aucun accès disque au runtime, rien à installer à
+côté de votre binaire.
+
+== Pourquoi
+
+Vous avez besoin d'un drapeau SVG pour un pays donné (ou pour un emoji
+drapeau donné), sans embarquer une boîte à outils GUI, sans dépendre
+d'une icon font installée sur la machine, sans livrer un répertoire
+`data/`. C'est exactement ce que fait ce shard : pur Crystal, zéro
+dépendance runtime, deux cent soixante-dix drapeaux accessibles par
+code ISO 3166-1 alpha-2 ou par emoji à indicateurs régionaux.
+
+== Installation
+
+Ajoutez la dépendance à votre `shard.yml` :
+
+[source,yaml]
+----
+dependencies:
+  crystal-flags:
+    github: aloli-crystal/crystal-flags
+    version: "~> 0.1"
+----
+
+Puis `shards install`.
+
+== Utilisation
+
+[source,crystal]
+----
+require "crystal-flags"
+
+# Recherche par code ISO 3166-1 alpha-2 (insensible à la casse).
+svg = CrystalFlags.svg("FR")  # => "<svg ...>...</svg>"
+svg = CrystalFlags.svg("fr")  # idem
+
+# Test de présence.
+CrystalFlags.available?("DE")  # => true
+CrystalFlags.available?("ZZ")  # => false
+
+# Convertir un emoji drapeau (paire d'indicateurs régionaux) en code ISO.
+CrystalFlags.code_for("🇫🇷")  # => "FR"
+CrystalFlags.code_for("🇩🇪")  # => "DE"
+
+# Raccourci : emoji drapeau -> SVG directement.
+CrystalFlags.svg_for("🇫🇷")  # => "<svg ...>...</svg>"
+
+# Itérer sur tous les codes connus.
+CrystalFlags.available.each { |c| puts c }
+----
+
+== Référence de l'API
+
+[cols="2,3,2"]
+|===
+| Méthode | Rôle | Notes
+
+| `.svg(code)` | Retourne le SVG pour `code`, ou `nil` si inconnu. | Insensible à la casse.
+| `.svg!(code)` | Identique, mais lève `KeyError` en cas d'absence. | À utiliser quand le code a déjà été validé.
+| `.available` | Retourne tous les codes connus (majuscules, triés). | Array(String).
+| `.available?(code)` | Test de présence. | Insensible à la casse.
+| `.code_for(flag)` | Décode un emoji drapeau vers son code ISO. | Retourne `nil` si l'entrée n'est pas exactement deux indicateurs régionaux.
+| `.svg_for(flag)` | Résout un emoji drapeau vers son SVG. | Raccourci : `svg(code_for(flag))`.
+|===
+
+=== Constantes
+
+* `CrystalFlags::VERSION` — version de ce shard Crystal.
+* `CrystalFlags::ICONS_VERSION` — version de lipis/flag-icons dont les
+  assets sont embarqués (actuellement `"7.5.0"`).
+* `CrystalFlags::FLAGS` — le `Hash(String, String)` sous-jacent qui
+  associe les codes (en majuscules) au contenu SVG. Exposé pour des
+  usages avancés ; préférez les méthodes ci-dessus.
+
+== Périmètre
+
+Ce shard fournit **uniquement des chaînes SVG brutes**. Il ne s'occupe
+pas de rasterisation, de rendu, ni d'intégration dans un format
+conteneur (PDF, HTML, etc.). Câbler le SVG dans un PDF ou une page HTML
+reste à la charge de l'appelant. Par exemple, combiner ce shard avec
+https://github.com/aloli-crystal/crystal-asciidoctor-pdf[crystal-asciidoctor-pdf]
+permet aux documents AsciiDoc d'afficher de vrais drapeaux de pays à
+la place des emojis à indicateurs régionaux.
+
+== Crédits et licences
+
+* Le shard Crystal est sous licence MIT (voir `LICENSE`).
+* Les SVG embarqués proviennent de
+  https://github.com/lipis/flag-icons[lipis/flag-icons] version 7.5.0,
+  également distribués sous licence MIT
+  (voir `data/flags/LICENSE-flag-icons.txt`).
+
+Les drapeaux de pays sont, à quelques exceptions près, des symboles
+du domaine public. lipis/flag-icons les diffuse sous MIT par
+commodité ; ce shard les redistribue dans les mêmes termes.
+
+== Développement
+
+[source,shell]
+----
+shards install
+crystal spec
+bin/ameba
+----
+
+Si le projet amont `lipis/flag-icons` publie de nouveaux drapeaux,
+régénérez le jeu embarqué :
+
+[source,shell]
+----
+# Dans un répertoire temporaire
+git clone --depth 1 https://github.com/lipis/flag-icons.git
+cp flag-icons/flags/4x3/*.svg crystal-flags/data/flags/
+cp flag-icons/LICENSE         crystal-flags/data/flags/LICENSE-flag-icons.txt
+
+# Régénérez le manifest utilisé à la compilation
+cd crystal-flags/data/flags
+ls *.svg | sed 's/\.svg$//' | sort > MANIFEST.txt
+----
+
+Mettez à jour `CrystalFlags::ICONS_VERSION` dans
+`src/crystal_flags.cr` en conséquence et ajoutez une entrée dans le
+CHANGELOG.

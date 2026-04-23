@@ -1,0 +1,7 @@
+/bin/*
+!/bin/crystal-flags.cr
+/lib/
+/.shards/
+*.dwarf
+/shard.lock
+.DS_Store

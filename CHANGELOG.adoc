@@ -1,0 +1,25 @@
+= Changelog
+:toc: left
+:toc-title: Versions
+:toclevels: 2
+
+== v0.1.0 — 2026-04-23
+
+First public release.
+
+* Embedded ~270 country flag SVG assets from
+  https://github.com/lipis/flag-icons[lipis/flag-icons] (MIT, v7.5.0),
+  inlined at compile time via `read_file`. Consumers of this shard
+  do not need to ship the `data/` directory alongside their compiled
+  binaries.
+* Public API:
+  - `CrystalFlags.svg(code)` / `svg!(code)` — look up an SVG by ISO
+    3166-1 alpha-2 code (case-insensitive).
+  - `CrystalFlags.available` — list every known code.
+  - `CrystalFlags.available?(code)` — presence test.
+  - `CrystalFlags.code_for(flag_emoji)` — convert a
+    regional-indicator flag emoji (e.g. `"🇫🇷"`) to its ISO code.
+  - `CrystalFlags.svg_for(flag_emoji)` — convenience:
+    `svg(code_for(flag_emoji))`.
+* CI with format check, tests, and ameba linter (shared
+  `.ameba.yml` config aligned with the Crystal ecosystem).

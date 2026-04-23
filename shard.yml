@@ -1,0 +1,21 @@
+name: crystal-flags
+version: 0.1.0
+
+description: |
+  Embedded country flag SVG assets (ISO 3166-1 alpha-2) for Crystal.
+  Ships ~270 SVG flags from lipis/flag-icons (MIT) inlined at compile
+  time. Exposes a minimal lookup API by code, plus a utility to
+  convert a regional-indicator flag emoji (e.g. "🇫🇷") to its ISO
+  code.
+
+authors:
+  - Philippe Nénert <philippe@aloli.fr>
+
+crystal: ">= 1.19.0"
+
+license: MIT
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: "~> 1.6"

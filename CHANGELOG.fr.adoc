@@ -1,0 +1,25 @@
+= Journal des modifications
+:toc: left
+:toc-title: Versions
+:toclevels: 2
+
+== v0.1.0 — 2026-04-23
+
+Première version publique.
+
+* Embarquement d'environ 270 drapeaux SVG issus de
+  https://github.com/lipis/flag-icons[lipis/flag-icons] (MIT, v7.5.0),
+  inlinés à la compilation via `read_file`. Les projets qui utilisent
+  ce shard n'ont pas besoin de livrer le répertoire `data/` avec leurs
+  binaires compilés.
+* API publique :
+  - `CrystalFlags.svg(code)` / `svg!(code)` — recherche un SVG par
+    code ISO 3166-1 alpha-2 (insensible à la casse).
+  - `CrystalFlags.available` — liste tous les codes connus.
+  - `CrystalFlags.available?(code)` — test de présence.
+  - `CrystalFlags.code_for(flag_emoji)` — convertit un emoji drapeau
+    à indicateurs régionaux (ex. `"🇫🇷"`) en code ISO.
+  - `CrystalFlags.svg_for(flag_emoji)` — raccourci :
+    `svg(code_for(flag_emoji))`.
+* CI avec vérification du format, tests et linter ameba (config
+  `.ameba.yml` partagée, alignée sur l'écosystème Crystal).

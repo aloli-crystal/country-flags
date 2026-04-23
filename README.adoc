@@ -1,0 +1,134 @@
+= crystal-flags
+:source-language: crystal
+:toc: left
+:toc-title: Table of contents
+:toclevels: 2
+
+image:https://github.com/aloli-crystal/crystal-flags/actions/workflows/ci.yml/badge.svg[CI,link=https://github.com/aloli-crystal/crystal-flags/actions/workflows/ci.yml]
+
+French version: link:README.fr.adoc[README.fr.adoc]
+
+Embedded country flag SVG assets for Crystal, with a minimal lookup
+API. Ships ~270 SVGs from https://github.com/lipis/flag-icons[lipis/flag-icons]
+(MIT), inlined at compile time — no runtime file access, nothing to
+install alongside your binary.
+
+== Why
+
+You need an SVG flag for a given country (or a given flag emoji),
+without pulling in a heavy GUI toolkit, without depending on an
+installed icon font, without shipping a `data/` directory. That is
+what this shard does: pure Crystal, zero runtime dependencies, two
+hundred and seventy flags available by ISO 3166-1 alpha-2 code or
+regional-indicator emoji.
+
+== Installation
+
+Add the dependency to your `shard.yml`:
+
+[source,yaml]
+----
+dependencies:
+  crystal-flags:
+    github: aloli-crystal/crystal-flags
+    version: "~> 0.1"
+----
+
+Then `shards install`.
+
+== Usage
+
+[source,crystal]
+----
+require "crystal-flags"
+
+# Look up by ISO 3166-1 alpha-2 code (case-insensitive).
+svg = CrystalFlags.svg("FR")  # => "<svg ...>...</svg>"
+svg = CrystalFlags.svg("fr")  # same
+
+# Presence test.
+CrystalFlags.available?("DE")  # => true
+CrystalFlags.available?("ZZ")  # => false
+
+# Convert a flag emoji (pair of regional indicators) to its ISO code.
+CrystalFlags.code_for("🇫🇷")  # => "FR"
+CrystalFlags.code_for("🇩🇪")  # => "DE"
+
+# Convenience: resolve a flag emoji straight to its SVG.
+CrystalFlags.svg_for("🇫🇷")  # => "<svg ...>...</svg>"
+
+# Iterate through every known code.
+CrystalFlags.available.each { |c| puts c }
+----
+
+== API reference
+
+[cols="2,3,2"]
+|===
+| Method | Purpose | Notes
+
+| `.svg(code)` | Returns the SVG for `code`, or `nil` if unknown. | Case-insensitive.
+| `.svg!(code)` | Same, but raises `KeyError` when unknown. | Use when the code has already been validated.
+| `.available` | Returns every known code (upper-case, sorted). | Array(String).
+| `.available?(code)` | Presence test. | Case-insensitive.
+| `.code_for(flag)` | Decodes a flag emoji to its ISO code. | Returns `nil` if the input is not exactly two regional indicators.
+| `.svg_for(flag)` | Resolves a flag emoji to its SVG. | Convenience: `svg(code_for(flag))`.
+|===
+
+=== Constants
+
+* `CrystalFlags::VERSION` — version of this Crystal shard.
+* `CrystalFlags::ICONS_VERSION` — version of lipis/flag-icons whose
+  assets are embedded (currently `"7.5.0"`).
+* `CrystalFlags::FLAGS` — the underlying `Hash(String, String)` mapping
+  upper-case codes to SVG content. Exposed for advanced use; prefer
+  the accessor methods above.
+
+== Scope
+
+This shard only exposes **raw SVG strings**. It does not rasterise,
+render, or embed flags in a container format (PDF, HTML, …). Wiring
+the SVG into a PDF or an HTML page is the responsibility of the
+caller. For instance, combining this shard with
+https://github.com/aloli-crystal/crystal-asciidoctor-pdf[crystal-asciidoctor-pdf]
+lets AsciiDoc documents render true country flags in place of emoji
+regional indicators.
+
+== Credits and licensing
+
+* The Crystal shard is MIT-licensed (see `LICENSE`).
+* The embedded SVG assets come from
+  https://github.com/lipis/flag-icons[lipis/flag-icons] version 7.5.0,
+  also distributed under the MIT License
+  (see `data/flags/LICENSE-flag-icons.txt`).
+
+Country flags are, with a few exceptions, public-domain symbols.
+lipis/flag-icons ships them under MIT for convenience; this shard
+re-distributes them under the same terms.
+
+== Development
+
+[source,shell]
+----
+shards install
+crystal spec
+bin/ameba
+----
+
+If the upstream `lipis/flag-icons` project releases new flags,
+regenerate the embedded set:
+
+[source,shell]
+----
+# In a temp directory
+git clone --depth 1 https://github.com/lipis/flag-icons.git
+cp flag-icons/flags/4x3/*.svg crystal-flags/data/flags/
+cp flag-icons/LICENSE         crystal-flags/data/flags/LICENSE-flag-icons.txt
+
+# Refresh the manifest used at compile time
+cd crystal-flags/data/flags
+ls *.svg | sed 's/\.svg$//' | sort > MANIFEST.txt
+----
+
+Bump `CrystalFlags::ICONS_VERSION` in `src/crystal_flags.cr`
+accordingly and add a changelog entry.
