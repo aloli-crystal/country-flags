@@ -1,10 +1,10 @@
-= crystal-flags
+= flags
 :source-language: crystal
 :toc: left
 :toc-title: Table des matières
 :toclevels: 2
 
-image:https://github.com/aloli-crystal/crystal-flags/actions/workflows/ci.yml/badge.svg[CI,link=https://github.com/aloli-crystal/crystal-flags/actions/workflows/ci.yml]
+image:https://github.com/aloli-crystal/flags/actions/workflows/ci.yml/badge.svg[CI,link=https://github.com/aloli-crystal/flags/actions/workflows/ci.yml]
 
 English version: link:README.adoc[README.adoc]
 
@@ -30,8 +30,8 @@ Ajoutez la dépendance à votre `shard.yml` :
 [source,yaml]
 ----
 dependencies:
-  crystal-flags:
-    github: aloli-crystal/crystal-flags
+  flags:
+    github: aloli-crystal/flags
     version: "~> 0.1"
 ----
 
@@ -41,7 +41,7 @@ Puis `shards install`.
 
 [source,crystal]
 ----
-require "crystal-flags"
+require "flags"
 
 # Recherche par code ISO 3166-1 alpha-2 (insensible à la casse).
 svg = CrystalFlags.svg("FR")  # => "<svg ...>...</svg>"
@@ -123,11 +123,11 @@ régénérez le jeu embarqué :
 ----
 # Dans un répertoire temporaire
 git clone --depth 1 https://github.com/lipis/flag-icons.git
-cp flag-icons/flags/4x3/*.svg crystal-flags/data/flags/
-cp flag-icons/LICENSE         crystal-flags/data/flags/LICENSE-flag-icons.txt
+cp flag-icons/flags/4x3/*.svg flags/data/flags/
+cp flag-icons/LICENSE         flags/data/flags/LICENSE-flag-icons.txt
 
 # Régénérez le manifest utilisé à la compilation
-cd crystal-flags/data/flags
+cd flags/data/flags
 ls *.svg | sed 's/\.svg$//' | sort > MANIFEST.txt
 ----
 

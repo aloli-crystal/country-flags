@@ -3,6 +3,17 @@
 :toc-title: Versions
 :toclevels: 2
 
+== v0.1.1 — 2026-04-29
+
+=== Changed
+
+* **GitHub repository renamed** from `aloli-crystal/crystal-flags` to
+  `aloli-crystal/flags` (Aloli naming convention: original creations
+  drop the `crystal-` prefix). Old links redirect automatically.
+* `name:` field in `shard.yml` updated from `crystal-flags` to `flags`.
+* New entry-point shim `src/flags.cr` (loads `src/crystal_flags.cr`);
+  `require "crystal-flags"` → `require "flags"`.
+
 == v0.1.0 — 2026-04-23
 
 First public release.
