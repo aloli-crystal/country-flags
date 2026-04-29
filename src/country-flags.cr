@@ -8,7 +8,7 @@
 # directory alongside their compiled binaries.
 module CountryFlags
   # Version of the Crystal shard.
-  VERSION = "0.1.0"
+  VERSION = "0.1.4"
 
   # Version of lipis/flag-icons whose assets are embedded.
   ICONS_VERSION = "7.5.0"
