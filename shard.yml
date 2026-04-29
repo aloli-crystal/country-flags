@@ -1,5 +1,5 @@
 name: flags
-version: 0.1.1
+version: 0.1.2
 
 description: |
   Embedded country flag SVG assets (ISO 3166-1 alpha-2) for Crystal.

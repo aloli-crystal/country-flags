@@ -3,16 +3,25 @@
 :toc-title: Versions
 :toclevels: 2
 
+== v0.1.2 — 2026-04-29
+
+=== Modifié
+
+* **Module interne renommé** `CrystalFlags` → `Flags` (convention
+  Aloli : retrait du préfixe `Crystal` sur les modules internes pour
+  s'aligner sur le nouveau nom du shard). Seul le nom du module
+  change ; comportement et chemin `require` inchangés.
+
 == v0.1.1 — 2026-04-29
 
 === Modifié
 
-* **Repo GitHub renommé** `aloli-crystal/crystal-flags` → `aloli-crystal/flags`
+* **Repo GitHub renommé** `aloli-crystal/flags` → `aloli-crystal/flags`
   (convention de nommage Aloli : les créations originales abandonnent
   le préfixe `crystal-`). Les anciens liens redirigent automatiquement.
-* Champ `name:` du `shard.yml` mis à jour de `crystal-flags` à `flags`.
+* Champ `name:` du `shard.yml` mis à jour de `flags` à `flags`.
 * Nouveau fichier d'entrée shim `src/flags.cr` (charge
-  `src/crystal_flags.cr`) ; `require "crystal-flags"` devient
+  `src/crystal_flags.cr`) ; `require "flags"` devient
   `require "flags"`.
 
 == v0.1.0 — 2026-04-23
