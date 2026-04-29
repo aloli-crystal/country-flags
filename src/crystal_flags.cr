@@ -6,7 +6,7 @@
 # All flag SVGs are read and inlined at compile time (via the
 # `read_file` macro), so consumers do not need to ship the `data/`
 # directory alongside their compiled binaries.
-module Flags
+module CountryFlags
   # Version of the Crystal shard.
   VERSION = "0.1.0"
 
@@ -70,9 +70,9 @@ module Flags
   #
   # Example:
   # ```
-  # Flags.code_for("🇫🇷") # => "FR"
-  # Flags.code_for("FR") # => nil
-  # Flags.code_for("")   # => nil
+  # CountryFlags.code_for("🇫🇷") # => "FR"
+  # CountryFlags.code_for("FR") # => nil
+  # CountryFlags.code_for("")   # => nil
   # ```
   def self.code_for(flag : String) : String?
     chars = flag.chars
@@ -93,7 +93,7 @@ module Flags
   #
   # Example:
   # ```
-  # Flags.svg_for("🇫🇷") # => "<svg ...>...</svg>"
+  # CountryFlags.svg_for("🇫🇷") # => "<svg ...>...</svg>"
   # ```
   def self.svg_for(flag : String) : String?
     code = code_for(flag)
