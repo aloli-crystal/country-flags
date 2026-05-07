@@ -8,7 +8,15 @@
 # directory alongside their compiled binaries.
 module CountryFlags
   # Version of the Crystal shard.
-  VERSION = "0.1.4"
+  # Lue au compile-time depuis `shard.yml` via le macro `read_file`.
+  # Cf. note mémoire `feedback_shard_version_macro.md` (mémoire ALOLI).
+  VERSION = {{
+              (read_file("#{__DIR__}/../shard.yml")
+                .lines
+                .find(&.starts_with?("version:")) || "version: 0.0.0")
+                .gsub(/^version:\s*/, "")
+                .chomp
+            }}
 
   # Version of lipis/flag-icons whose assets are embedded.
   ICONS_VERSION = "7.5.0"
