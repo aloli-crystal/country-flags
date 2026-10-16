@@ -1,5 +1,5 @@
 name: country-flags
-version: 0.1.5
+version: 0.1.6
 
 description: |
   Embedded country flag SVG assets (ISO 3166-1 alpha-2) for Crystal.
@@ -18,4 +18,4 @@ license: MIT
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
-    version: "~> 1.6"
+    version: "~> 1.7"

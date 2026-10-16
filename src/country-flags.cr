@@ -84,11 +84,11 @@ module CountryFlags
   # ```
   def self.code_for(flag : String) : String?
     chars = flag.chars
-    return nil unless chars.size == 2
+    return unless chars.size == 2
     a = chars[0].ord
     b = chars[1].ord
-    return nil unless REGIONAL_INDICATOR_A <= a <= REGIONAL_INDICATOR_Z
-    return nil unless REGIONAL_INDICATOR_A <= b <= REGIONAL_INDICATOR_Z
+    return unless REGIONAL_INDICATOR_A <= a <= REGIONAL_INDICATOR_Z
+    return unless REGIONAL_INDICATOR_A <= b <= REGIONAL_INDICATOR_Z
     letter_a = ('A'.ord + (a - REGIONAL_INDICATOR_A)).chr
     letter_b = ('A'.ord + (b - REGIONAL_INDICATOR_A)).chr
     "#{letter_a}#{letter_b}"
